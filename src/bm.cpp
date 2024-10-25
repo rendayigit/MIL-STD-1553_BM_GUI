@@ -3,17 +3,28 @@
 #include <chrono>
 #include <exception>
 #include <iostream>
-#include <slint.h>
 #include <string>
 
 BM::BM() : m_devNum(0x0000) {}
 
-BM::~BM() { aceFree(m_devNum); }
+BM::~BM() { stopBm(); }
 
 int BM::startBm(S16BIT devNum) {
   S16BIT Err;
 
   m_devNum = devNum;
+
+  m_loop = false;
+
+  if (m_monitorThread.joinable()) {
+    m_monitorThread.join();
+  }
+
+  Err = aceFree(m_devNum);
+
+  if (Err) {
+    return Err;
+  }
 
   Err = aceInitialize(m_devNum, ACE_ACCESS_CARD, ACE_MODE_MT, 0, 0, 0);
 
@@ -27,13 +38,32 @@ int BM::startBm(S16BIT devNum) {
     return Err;
   }
 
+  try {
+    m_loop = true;
+    m_monitorThread = std::thread([&] { monitor(); });
+  } catch (std::exception e) {
+    std::cout << e.what() << std::endl;
+  }
+
   return 0;
 }
 
 int BM::stopBm() {
   S16BIT Err;
 
+  m_loop = false;
+
+  if (m_monitorThread.joinable()) {
+    m_monitorThread.join();
+  }
+
   Err = aceMTStop(m_devNum);
+
+  if (Err) {
+    return Err;
+  }
+
+  Err = aceFree(m_devNum);
 
   if (Err) {
     return Err;
@@ -42,20 +72,27 @@ int BM::stopBm() {
   return 0;
 }
 
-void BM::start() {
-  try {
-    monitorThread = std::thread([&] { monitor(); });
-  } catch (std::exception e) {
-    std::cout << e.what() << std::endl;
-  }
-}
-
 std::string BM::getDecodedMsg(U32BIT nMsgNum, MSGSTRUCT *pMsg) {
   U16BIT i;
   char szBuffer[100];
   U16BIT wRT, wTR1, wTR2, wSA, wWC;
 
   std::string decodedMessage = "";
+
+  // { // TODO: remove after testing
+  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
+  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
+  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
+  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
+  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
+  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
+  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
+  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
+  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
+  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
+
+  //   return decodedMessage;
+  // }
 
   /* Display message header info */
   if (pMsg->wTimeTag2 ||
@@ -135,12 +172,15 @@ void BM::monitor() {
     Err = aceMTGetStkMsgDecoded(m_devNum, &sMsg, ACE_MT_MSGLOC_NEXT_PURGE,
                                 ACE_MT_STKLOC_ACTIVE);
     if (Err == 1) {
-      std::string decodedMessage = getDecodedMsg(++nMsgNum, &sMsg);
-      std::cout << decodedMessage;
-      slint::invoke_from_event_loop([&] { updateMessages(decodedMessage); });
-      // updateFilter();
+      m_messageBuffer += getDecodedMsg(++nMsgNum, &sMsg);
+
+      if (m_messageBuffer.length() >= 1000) {
+        std::cout << m_messageBuffer;
+        updateMessages(m_messageBuffer);
+        m_messageBuffer = "";
+      }
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 }

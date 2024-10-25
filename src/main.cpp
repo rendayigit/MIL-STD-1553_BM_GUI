@@ -8,24 +8,16 @@ int main(int argc, char **argv) {
 
   auto ui = AppWindow::create();
 
-  ui->invoke_setFilterText("RT01:SA01");  // TODO: remove after testing
-  ui->invoke_setMessages("Test message"); // TODO: remove after testing
-
   BM bm;
 
-  // bm.setUpdateFilter([&](std::string text) {
-  //   slint::invoke_from_event_loop(
-  //       [&] { ui->invoke_setFilterText(text.data()); });
-  // });
+  bm.setUpdateFilter([&](std::string text) {
+    slint::invoke_from_event_loop(
+        [&] { ui->invoke_setFilterText(text.c_str()); });
+  });
 
-  // bm.setUpdateMessages([&](std::string text) {
-  //   slint::invoke_from_event_loop([&] { ui->invoke_setMessages(text.data()); });
-  // });
-
-  bm.setUpdateFilter(
-      [&](std::string text) { ui->invoke_setFilterText(text.data()); });
-  bm.setUpdateMessages(
-      [&](std::string text) { ui->invoke_setMessages(text.data()); });
+  bm.setUpdateMessages([&](std::string text) {
+    slint::invoke_from_event_loop([&] { ui->invoke_setMessages(text.c_str()); });
+  });
 
   ui->on_connectPressed([&] {
     U8BIT deviceNum = static_cast<unsigned short>(
@@ -45,9 +37,7 @@ int main(int argc, char **argv) {
     std::cout << "Selected: " << rt.data() << ": " << sa.data() << std::endl;
   });
 
-  bm.start();
   ui->run();
-
 
   return 0;
 }

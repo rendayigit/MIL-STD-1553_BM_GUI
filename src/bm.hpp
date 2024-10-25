@@ -25,8 +25,6 @@ public:
 
   void setLoop(bool loop) { m_loop = loop; }
 
-  void start();
-
 private:
   static std::string getDecodedMsg(U32BIT nMsgNum, MSGSTRUCT *pMsg);
   void monitor();
@@ -34,7 +32,8 @@ private:
   std::function<void(std::string)> updateFilter;
   std::function<void(std::string)> updateMessages;
 
-  std::thread monitorThread;
+  std::thread m_monitorThread;
+  std::string m_messageBuffer;
 
   S16BIT m_devNum;
   bool m_loop = true;

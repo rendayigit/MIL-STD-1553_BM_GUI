@@ -35,7 +35,8 @@ export component AppWindow inherits Window {
     }
 
     public function setMessages(text: string) {
-        messages.text = messages.text + text;
+        messages.text += text;
+        debug(text); // TODO: remove after testing
     }
 
     init => {
