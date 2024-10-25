@@ -8,7 +8,15 @@ int main(int argc, char **argv) {
 
   auto ui = AppWindow::create();
 
+  ui->invoke_setFilterText("RT01:SA01");  // TODO: remove after testing
+  ui->invoke_setMessages("Test message"); // TODO: remove after testing
+
   BM bm;
+
+  bm.setUpdateFilter(
+      [&](std::string text) { ui->invoke_setFilterText(text.data()); });
+  bm.setUpdateMessages(
+      [&](std::string text) { ui->invoke_setMessages(text.data()); });
 
   ui->on_connectPressed([&] {
     U8BIT deviceNum = static_cast<unsigned short>(
@@ -24,10 +32,7 @@ int main(int argc, char **argv) {
     }
   });
 
-  ui->invoke_setFilterText("RT01:SA01");
-  ui->invoke_setMessages("Test message");
-
-  ui->on_saSelected([&](slint::SharedString rt, slint::SharedString sa){
+  ui->on_saSelected([&](slint::SharedString rt, slint::SharedString sa) {
     std::cout << "Selected: " << rt.data() << ": " << sa.data() << std::endl;
   });
 
