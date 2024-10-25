@@ -1,0 +1,5 @@
+{
+    "cmake.configureArgs": [
+        "-DSLINT_STYLE=\"fluent\""
+    ]
+}

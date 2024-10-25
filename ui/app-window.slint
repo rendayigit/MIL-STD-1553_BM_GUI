@@ -1,0 +1,129 @@
+import { Button, CheckBox, ComboBox, TextEdit, Palette, ListView } from "std-widgets.slint";
+import { Rt-Sa-List } from "rt-sa-list.slint"; 
+import { Rt-Sa-Grid } from "rt-sa-grid.slint"; 
+
+export global guiGlobals {
+    in property <string> device;
+}
+
+export component AppWindow inherits Window {
+    title: "MIL-STD-1553 Bus Monitor";
+
+    min-width: 800px;
+    min-height: 400px;
+
+    callback connectPressed();
+
+    public function setError(errorMsg: string) {
+        errorText.color = Colors.red;
+        errorText.text = errorMsg;
+    }
+
+    public function setConnectStatus(status: bool) {
+        if (status) {
+            errorText.color = Colors.green;
+            errorText.text = "Connected to device " + guiGlobals.device;
+        } else {
+            // Failure status message set by setError
+        }
+    }
+
+    init => {
+        Palette.color-scheme = ColorScheme.dark;
+    }
+
+    VerticalLayout {
+        padding-left: 15px;
+        padding-right: 15px;
+        spacing: 5px;
+
+        HorizontalLayout {
+            HorizontalLayout {
+                padding: 15px;
+                spacing: 10px;
+                alignment: start;
+
+                Text {
+                    text: "Device#: ";
+                    font-size: 15px;
+                    vertical-alignment: center;
+                    horizontal-alignment: center;
+                }
+
+                device-box := TextInput {
+                    Rectangle {
+                        background: gray;
+                        opacity: 20%;
+                        width: 100%;
+                        height: 100%;
+                    }
+
+                    font-size: 20px;
+                    height: 40px;
+                    width: 65px;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                    text: "0000";
+                }
+
+                Button {
+                    text: "Connect";
+                    primary: true;
+                    clicked => {
+                        guiGlobals.device = device-box.text;
+                        connectPressed();
+                    }
+                }
+            }
+        }
+
+        // Rt-Sa-List {
+        //     width: 150px;
+        // }
+
+        Rt-Sa-Grid {
+            max-height: 440px;
+        }
+
+        HorizontalLayout {
+            Text {
+                text: "Messages";
+                vertical-alignment: bottom;
+                horizontal-alignment: left;
+                padding-top: 10px;
+                font-size: 20px;
+                width: 110px;
+            }
+
+            Text {
+                text: "(No Filter)";
+                vertical-alignment: TextVerticalAlignment.bottom;
+                horizontal-alignment: TextHorizontalAlignment.left;
+                padding-top: 10px;
+                font-size: 15px;
+            }
+        }
+
+        TextEdit {
+            padding-top: 10px;
+            text: " MSG #0469.  TIME = 00000000:00000268:00022096us    BUS A   TYPE1: RT to BC \n" + "CMD1 AC78 --> 21-T-03-24\n" + "ERROR: NORES\n" + "MSG #0470.  TIME = 00000000:00000268:00022138us    BUS A   TYPE1: RT to BC \n" + "CMD1 3C20 --> 07-T-01-00\n" + "ERROR: NORES\n" + "MSG #0471.  TIME = 00000000:00000268:00091236us    BUS A   TYPE0: BC to RT \n" + "CMD1 1090 --> 02-R-04-16\n" + "DATA BFF9  42B1  3F02  59D5  BFF9  9999  9999  999A  \n" + "3FF6  A47A  61E2  1375  3FF6  FB62  BC79  533B  \n" + "ERROR: NORES \n" + "MSG #0472.  TIME = 00000000:00000268:00122044us    BUS A   TYPE1: RT to BC \n" + "CMD1 14D0 --> 02-T-06-16\n" + "ERROR: NORES \n" + "MSG #0473.  TIME = 00000000:00000268:00122088us    BUS A   TYPE1: RT to BC \n" + "CMD1 844C --> 16-T-02-12\n" + "ERROR: NORES \n" + " MSG #0469.  TIME = 00000000:00000268:00022096us    BUS A   TYPE1: RT to BC \n" + "CMD1 AC78 --> 21-T-03-24\n" + "ERROR: NORES\n" + "MSG #0470.  TIME = 00000000:00000268:00022138us    BUS A   TYPE1: RT to BC \n" + "CMD1 3C20 --> 07-T-01-00\n" + "ERROR: NORES\n" + "MSG #0471.  TIME = 00000000:00000268:00091236us    BUS A   TYPE0: BC to RT \n" + "CMD1 1090 --> 02-R-04-16\n" + "DATA BFF9  42B1  3F02  59D5  BFF9  9999  9999  999A  \n" + "3FF6  A47A  61E2  1375  3FF6  FB62  BC79  533B  \n" + "ERROR: NORES \n" + "MSG #0472.  TIME = 00000000:00000268:00122044us    BUS A   TYPE1: RT to BC \n" + "CMD1 14D0 --> 02-T-06-16\n" + "ERROR: NORES \n" + "MSG #0473.  TIME = 00000000:00000268:00122088us    BUS A   TYPE1: RT to BC \n" + "CMD1 844C --> 16-T-02-12\n" + "ERROR: NORES ";
+            read-only: true;
+        }
+
+        HorizontalLayout {
+            height: 20px;
+            padding-left: 10px;
+            padding-right: 10px;
+
+            errorText := Text {
+                text: "Ready, press connect";
+                color: green;
+            }
+
+            Text {
+                horizontal-alignment: right;
+                text: "v1.0";
+            }
+        }
+    }
+}

@@ -1,0 +1,166 @@
+import { ListView, Palette } from "std-widgets.slint";
+
+component Sa-List-Item inherits VerticalLayout {
+    in property <string> sa-text;
+    visible: false;
+    height: self.visible ? 15px : 0px;
+
+    animate height {
+        easing: ease;
+        duration: 100ms;
+    }
+
+    Rectangle {
+        background: touchArea.has-hover ? Palette.accent-background : Palette.accent-background.darker(20%);
+    }
+
+    Text {
+        text: sa-text;
+    }
+
+    touchArea := TouchArea {
+        clicked => {
+            debug("clicked", sa-text);
+        }
+    }
+}
+
+component Tree-List inherits VerticalLayout {
+    in-out property <bool> is-open: false;
+    in property <string> item-text;
+    visible: false;
+    height: self.visible ? 15px : 0px;
+
+    animate height {
+        easing: ease;
+        duration: 100ms;
+    }
+
+    Rectangle {
+        background: !touchArea.has-hover ? Palette.accent-background : Palette.accent-background.darker(20%);
+
+        HorizontalLayout {
+            Text {
+                text: is-open ? "⊟" : "⊞";
+                color: Palette.alternate-background;
+            }
+
+            Text {
+                text: item-text;
+                color: Palette.alternate-background;
+            }
+        }
+
+        touchArea := TouchArea {
+            clicked => {
+                is-open = !is-open;
+            }
+        }
+    }
+}
+
+export component Rt-Sa-List inherits ListView {
+    property <[string]> bus-list: ["BUS A", "BUS B"];
+
+    property <[string]> rt-list: [
+        "RT 01",
+        "RT 02",
+        "RT 03",
+        "RT 04",
+        "RT 05",
+        "RT 06",
+        "RT 07",
+        "RT 08",
+        "RT 09",
+        "RT 10",
+        "RT 11",
+        "RT 12",
+        "RT 13",
+        "RT 14",
+        "RT 15",
+        "RT 16",
+        "RT 17",
+        "RT 18",
+        "RT 19",
+        "RT 20",
+        "RT 21",
+        "RT 22",
+        "RT 23",
+        "RT 24",
+        "RT 25",
+        "RT 26",
+        "RT 27",
+        "RT 28",
+        "RT 29",
+        "RT 30",
+        "RT 31"
+    ];
+
+    property <[string]> sa-list: [
+        "SA 01",
+        "SA 02",
+        "SA 03",
+        "SA 04",
+        "SA 05",
+        "SA 06",
+        "SA 07",
+        "SA 08",
+        "SA 09",
+        "SA 10",
+        "SA 11",
+        "SA 12",
+        "SA 13",
+        "SA 14",
+        "SA 15",
+        "SA 16",
+        "SA 17",
+        "SA 18",
+        "SA 19",
+        "SA 20",
+        "SA 21",
+        "SA 22",
+        "SA 23",
+        "SA 24",
+        "SA 25",
+        "SA 26",
+        "SA 27",
+        "SA 28",
+        "SA 29",
+        "SA 30",
+        "SA 31"
+    ];
+
+    for bus in bus-list: Tree-List {
+        property <bool> is-bus-list-open: true;
+        item-text: bus;
+        is-open: is-bus-list-open;
+        visible: true;
+
+        TouchArea {
+            clicked => {
+                is-bus-list-open = !is-bus-list-open;
+                debug("is-bus-list-open = ", is-bus-list-open)
+            }
+        }
+
+        for rt in rt-list: Tree-List {
+            x: 20px;
+            item-text: rt;
+            visible: is-bus-list-open;
+
+            property <bool> is-rt-list-open: false;
+            TouchArea {
+                clicked => {
+                    is-rt-list-open = !is-rt-list-open;
+                    debug("is-rt-list-open = ", is-rt-list-open)
+                }
+            }
+
+            for sa in sa-list: Sa-List-Item {
+                x: 20px;
+                sa-text: sa;
+                visible: is-rt-list-open;
+            }
+        }
+    }
+}

@@ -1,0 +1,119 @@
+import { Palette, ListView } from "std-widgets.slint";
+
+export component Rt-Sa-Grid {
+    property <[string]> rt-list: [
+        "00",
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31"
+    ];
+
+    property <[string]> sa-list: [
+        "00",
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31"
+    ];
+
+    VerticalLayout {
+        Text {
+            text: "RT:SA";
+            font-size: 20px;
+        }
+
+        ListView {
+            for rt in rt-list: HorizontalLayout {
+                Text {
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                    width: 15px;
+                    text: rt;
+                    font-size: 10px;
+                    color: white;
+                }
+
+                for sa in sa-list: Rectangle {
+                    background: gray;
+                    border-width: 1px;
+                    border-color: black;
+                    width: root.width / 33;
+
+                    Text {
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                        text: rt + ":" + sa;
+                        font-size: 10px;
+                        color: whitesmoke;
+                    }
+
+                    TouchArea {
+                        clicked => {
+                            debug("clicked: ", rt,":", sa);
+                            if (parent.background == Colors.green) {
+                                parent.background = Colors.red;
+                            } else {
+                                parent.background = Colors.green;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
