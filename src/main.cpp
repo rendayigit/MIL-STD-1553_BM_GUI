@@ -13,6 +13,15 @@ int main(int argc, char **argv) {
 
   BM bm;
 
+  // bm.setUpdateFilter([&](std::string text) {
+  //   slint::invoke_from_event_loop(
+  //       [&] { ui->invoke_setFilterText(text.data()); });
+  // });
+
+  // bm.setUpdateMessages([&](std::string text) {
+  //   slint::invoke_from_event_loop([&] { ui->invoke_setMessages(text.data()); });
+  // });
+
   bm.setUpdateFilter(
       [&](std::string text) { ui->invoke_setFilterText(text.data()); });
   bm.setUpdateMessages(
@@ -36,6 +45,9 @@ int main(int argc, char **argv) {
     std::cout << "Selected: " << rt.data() << ": " << sa.data() << std::endl;
   });
 
+  bm.start();
   ui->run();
+
+
   return 0;
 }

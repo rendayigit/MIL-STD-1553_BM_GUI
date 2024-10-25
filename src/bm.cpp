@@ -1,6 +1,9 @@
 #include "bm.hpp"
 #include "mt.h"
+#include <chrono>
+#include <exception>
 #include <iostream>
+#include <slint.h>
 #include <string>
 
 BM::BM() : m_devNum(0x0000) {}
@@ -39,7 +42,15 @@ int BM::stopBm() {
   return 0;
 }
 
-static std::string getDecodedMsg(U32BIT nMsgNum, MSGSTRUCT *pMsg) {
+void BM::start() {
+  try {
+    monitorThread = std::thread([&] { monitor(); });
+  } catch (std::exception e) {
+    std::cout << e.what() << std::endl;
+  }
+}
+
+std::string BM::getDecodedMsg(U32BIT nMsgNum, MSGSTRUCT *pMsg) {
   U16BIT i;
   char szBuffer[100];
   U16BIT wRT, wTR1, wTR2, wSA, wWC;
@@ -109,21 +120,27 @@ static std::string getDecodedMsg(U32BIT nMsgNum, MSGSTRUCT *pMsg) {
     decodedMessage += "\n            STA2 " + std::to_string(pMsg->wStsWrd2);
   }
 
+  decodedMessage += "\n\n";
+
   return decodedMessage;
 }
 
-void BM::monitorThread() {
+void BM::monitor() {
   S16BIT Err;
   MSGSTRUCT sMsg;
   U32BIT nMsgNum = 0;
 
   /* Poll Msgs */
-  while (true) {
+  while (m_loop) {
     Err = aceMTGetStkMsgDecoded(m_devNum, &sMsg, ACE_MT_MSGLOC_NEXT_PURGE,
                                 ACE_MT_STKLOC_ACTIVE);
     if (Err == 1) {
-      updateMessages(getDecodedMsg(++nMsgNum, &sMsg));
+      std::string decodedMessage = getDecodedMsg(++nMsgNum, &sMsg);
+      std::cout << decodedMessage;
+      slint::invoke_from_event_loop([&] { updateMessages(decodedMessage); });
       // updateFilter();
     }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
   }
 }

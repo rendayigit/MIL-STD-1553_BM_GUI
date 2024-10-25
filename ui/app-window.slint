@@ -35,7 +35,7 @@ export component AppWindow inherits Window {
     }
 
     public function setMessages(text: string) {
-        messages.text = text;
+        messages.text = messages.text + text;
     }
 
     init => {
@@ -116,7 +116,7 @@ export component AppWindow inherits Window {
 
         messages := TextEdit {
             padding-top: 10px;
-            text: " MSG #0469.  TIME = 00000000:00000268:00022096us    BUS A   TYPE1: RT to BC \n" + "CMD1 AC78 --> 21-T-03-24\n" + "ERROR: NORES\n" + "MSG #0470.  TIME = 00000000:00000268:00022138us    BUS A   TYPE1: RT to BC \n" + "CMD1 3C20 --> 07-T-01-00\n" + "ERROR: NORES\n" + "MSG #0471.  TIME = 00000000:00000268:00091236us    BUS A   TYPE0: BC to RT \n" + "CMD1 1090 --> 02-R-04-16\n" + "DATA BFF9  42B1  3F02  59D5  BFF9  9999  9999  999A  \n" + "3FF6  A47A  61E2  1375  3FF6  FB62  BC79  533B  \n" + "ERROR: NORES \n" + "MSG #0472.  TIME = 00000000:00000268:00122044us    BUS A   TYPE1: RT to BC \n" + "CMD1 14D0 --> 02-T-06-16\n" + "ERROR: NORES \n" + "MSG #0473.  TIME = 00000000:00000268:00122088us    BUS A   TYPE1: RT to BC \n" + "CMD1 844C --> 16-T-02-12\n" + "ERROR: NORES \n" + " MSG #0469.  TIME = 00000000:00000268:00022096us    BUS A   TYPE1: RT to BC \n" + "CMD1 AC78 --> 21-T-03-24\n" + "ERROR: NORES\n" + "MSG #0470.  TIME = 00000000:00000268:00022138us    BUS A   TYPE1: RT to BC \n" + "CMD1 3C20 --> 07-T-01-00\n" + "ERROR: NORES\n" + "MSG #0471.  TIME = 00000000:00000268:00091236us    BUS A   TYPE0: BC to RT \n" + "CMD1 1090 --> 02-R-04-16\n" + "DATA BFF9  42B1  3F02  59D5  BFF9  9999  9999  999A  \n" + "3FF6  A47A  61E2  1375  3FF6  FB62  BC79  533B  \n" + "ERROR: NORES \n" + "MSG #0472.  TIME = 00000000:00000268:00122044us    BUS A   TYPE1: RT to BC \n" + "CMD1 14D0 --> 02-T-06-16\n" + "ERROR: NORES \n" + "MSG #0473.  TIME = 00000000:00000268:00122088us    BUS A   TYPE1: RT to BC \n" + "CMD1 844C --> 16-T-02-12\n" + "ERROR: NORES ";
+            // text: " MSG #0469.  TIME = 00000000:00000268:00022096us    BUS A   TYPE1: RT to BC \n" + "CMD1 AC78 --> 21-T-03-24\n" + "ERROR: NORES\n" + "MSG #0470.  TIME = 00000000:00000268:00022138us    BUS A   TYPE1: RT to BC \n" + "CMD1 3C20 --> 07-T-01-00\n" + "ERROR: NORES\n" + "MSG #0471.  TIME = 00000000:00000268:00091236us    BUS A   TYPE0: BC to RT \n" + "CMD1 1090 --> 02-R-04-16\n" + "DATA BFF9  42B1  3F02  59D5  BFF9  9999  9999  999A  \n" + "3FF6  A47A  61E2  1375  3FF6  FB62  BC79  533B  \n" + "ERROR: NORES \n" + "MSG #0472.  TIME = 00000000:00000268:00122044us    BUS A   TYPE1: RT to BC \n" + "CMD1 14D0 --> 02-T-06-16\n" + "ERROR: NORES \n" + "MSG #0473.  TIME = 00000000:00000268:00122088us    BUS A   TYPE1: RT to BC \n" + "CMD1 844C --> 16-T-02-12\n" + "ERROR: NORES \n" + " MSG #0469.  TIME = 00000000:00000268:00022096us    BUS A   TYPE1: RT to BC \n" + "CMD1 AC78 --> 21-T-03-24\n" + "ERROR: NORES\n" + "MSG #0470.  TIME = 00000000:00000268:00022138us    BUS A   TYPE1: RT to BC \n" + "CMD1 3C20 --> 07-T-01-00\n" + "ERROR: NORES\n" + "MSG #0471.  TIME = 00000000:00000268:00091236us    BUS A   TYPE0: BC to RT \n" + "CMD1 1090 --> 02-R-04-16\n" + "DATA BFF9  42B1  3F02  59D5  BFF9  9999  9999  999A  \n" + "3FF6  A47A  61E2  1375  3FF6  FB62  BC79  533B  \n" + "ERROR: NORES \n" + "MSG #0472.  TIME = 00000000:00000268:00122044us    BUS A   TYPE1: RT to BC \n" + "CMD1 14D0 --> 02-T-06-16\n" + "ERROR: NORES \n" + "MSG #0473.  TIME = 00000000:00000268:00122088us    BUS A   TYPE1: RT to BC \n" + "CMD1 844C --> 16-T-02-12\n" + "ERROR: NORES ";
             read-only: true;
         }
 
