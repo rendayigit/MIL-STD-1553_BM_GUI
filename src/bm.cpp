@@ -1,4 +1,5 @@
 #include "bm.hpp"
+#include "mt.h"
 #include <iostream>
 
 BM::BM() : m_devNum(0x0000) {}
@@ -22,7 +23,7 @@ int BM::startBm(S16BIT devNum) {
 int BM::stopBm() {
   S16BIT Err;
 
-  Err = aceBCStop(m_devNum);
+  Err = aceMTStop(m_devNum);
 
   if (Err) {
     return Err;

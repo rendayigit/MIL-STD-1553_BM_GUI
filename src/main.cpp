@@ -24,6 +24,13 @@ int main(int argc, char **argv) {
     }
   });
 
+  ui->invoke_setFilterText("RT01:SA01");
+  ui->invoke_setMessages("Test message");
+
+  ui->on_saSelected([&](slint::SharedString rt, slint::SharedString sa){
+    std::cout << "Selected: " << rt.data() << ": " << sa.data() << std::endl;
+  });
+
   ui->run();
   return 0;
 }

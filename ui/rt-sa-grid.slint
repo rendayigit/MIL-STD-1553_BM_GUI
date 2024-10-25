@@ -1,42 +1,8 @@
 import { Palette, ListView } from "std-widgets.slint";
+import { Rt-Sa-Globals } from "globals.slint";
 
 export component Rt-Sa-Grid {
-    property <[string]> rt-list: [
-        "00",
-        "01",
-        "02",
-        "03",
-        "04",
-        "05",
-        "06",
-        "07",
-        "08",
-        "09",
-        "10",
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18",
-        "19",
-        "20",
-        "21",
-        "22",
-        "23",
-        "24",
-        "25",
-        "26",
-        "27",
-        "28",
-        "29",
-        "30",
-        "31"
-    ];
-
-    property <[string]> sa-list: [
+    property <[string]> rt-sa-list: [
         "00",
         "01",
         "02",
@@ -78,7 +44,7 @@ export component Rt-Sa-Grid {
         }
 
         ListView {
-            for rt in rt-list: HorizontalLayout {
+            for rt in rt-sa-list: HorizontalLayout {
                 Text {
                     horizontal-alignment: center;
                     vertical-alignment: center;
@@ -88,8 +54,8 @@ export component Rt-Sa-Grid {
                     color: white;
                 }
 
-                for sa in sa-list: Rectangle {
-                    background: gray;
+                for sa in rt-sa-list: Rectangle {
+                    background: touch-area.has-hover ? Colors.gray.darker(20%) : Colors.gray;
                     border-width: 1px;
                     border-color: black;
                     width: root.width / 33;
@@ -102,9 +68,11 @@ export component Rt-Sa-Grid {
                         color: whitesmoke;
                     }
 
-                    TouchArea {
+                    touch-area := TouchArea {
                         clicked => {
-                            debug("clicked: ", rt,":", sa);
+                            Rt-Sa-Globals.saSelected(rt, sa);
+                            // TODO: remove below code once testing is complete
+                            // debug("clicked: ", rt,":", sa);
                             if (parent.background == Colors.green) {
                                 parent.background = Colors.red;
                             } else {
