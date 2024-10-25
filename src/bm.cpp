@@ -72,27 +72,13 @@ int BM::stopBm() {
   return 0;
 }
 
+// TODO: Refactor below function, code aqcuired from mtpoll sample
 std::string BM::getDecodedMsg(U32BIT nMsgNum, MSGSTRUCT *pMsg) {
   U16BIT i;
   char szBuffer[100];
   U16BIT wRT, wTR1, wTR2, wSA, wWC;
 
   std::string decodedMessage = "";
-
-  // { // TODO: remove after testing
-  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
-  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
-  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
-  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
-  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
-  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
-  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
-  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
-  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
-  //   decodedMessage += "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n";
-
-  //   return decodedMessage;
-  // }
 
   /* Display message header info */
   if (pMsg->wTimeTag2 ||
@@ -172,15 +158,17 @@ void BM::monitor() {
     Err = aceMTGetStkMsgDecoded(m_devNum, &sMsg, ACE_MT_MSGLOC_NEXT_PURGE,
                                 ACE_MT_STKLOC_ACTIVE);
     if (Err == 1) {
+      static std::string m_messageBuffer;
       m_messageBuffer += getDecodedMsg(++nMsgNum, &sMsg);
 
       if (m_messageBuffer.length() >= 1000) {
-        std::cout << m_messageBuffer;
         updateMessages(m_messageBuffer);
         m_messageBuffer = "";
       }
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    // TODO: implement rt sa filter functionality
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 }

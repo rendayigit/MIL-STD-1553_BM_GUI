@@ -10,13 +10,15 @@ int main(int argc, char **argv) {
 
   BM bm;
 
-  bm.setUpdateFilter([&](std::string text) {
+  bm.setUpdateFilter([&](const std::string &text) {
     slint::invoke_from_event_loop(
         [&] { ui->invoke_setFilterText(text.c_str()); });
   });
 
-  bm.setUpdateMessages([&](std::string text) {
-    slint::invoke_from_event_loop([&] { ui->invoke_setMessages(text.c_str()); });
+  bm.setUpdateMessages([&](const std::string &text) {
+    std::cout << text;
+    slint::invoke_from_event_loop(
+        [&] { ui->invoke_setMessages(std::move(text).c_str()); });
   });
 
   ui->on_connectPressed([&] {

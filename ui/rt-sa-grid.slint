@@ -71,8 +71,7 @@ export component Rt-Sa-Grid {
                     touch-area := TouchArea {
                         clicked => {
                             Rt-Sa-Globals.saSelected(rt, sa);
-                            // TODO: remove below code once testing is complete
-                            // debug("clicked: ", rt,":", sa);
+                            // TODO: set colors according to rt responses
                             if (parent.background == Colors.green) {
                                 parent.background = Colors.red;
                             } else {

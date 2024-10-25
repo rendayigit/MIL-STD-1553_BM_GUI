@@ -15,11 +15,11 @@ public:
   int startBm(S16BIT devNum);
   int stopBm();
 
-  void setUpdateFilter(const std::function<void(std::string)> &updateFilter_) {
+  void setUpdateFilter(const std::function<void(const std::string &)> &updateFilter_) {
     updateFilter = updateFilter_;
   }
   void
-  setUpdateMessages(const std::function<void(std::string)> &updateMessages_) {
+  setUpdateMessages(const std::function<void(const std::string &)> &updateMessages_) {
     updateMessages = updateMessages_;
   }
 
@@ -29,11 +29,10 @@ private:
   static std::string getDecodedMsg(U32BIT nMsgNum, MSGSTRUCT *pMsg);
   void monitor();
 
-  std::function<void(std::string)> updateFilter;
-  std::function<void(std::string)> updateMessages;
+  std::function<void(const std::string &)> updateFilter;
+  std::function<void(const std::string &)> updateMessages;
 
   std::thread m_monitorThread;
-  std::string m_messageBuffer;
 
   S16BIT m_devNum;
   bool m_loop = true;
